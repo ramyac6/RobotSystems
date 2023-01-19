@@ -1,5 +1,16 @@
 import time
 import os
+import logging
+from logdecorator import log_on_start, log_on_end, log_on_error
+
+# Insert before function you want logdecorator for
+#  @log_on_start (logging.DEBUG, "Message when function starts")
+#  @log_on_error (logging.DEBUG, "Message when function encounters an error before completing")
+#  @log_on_end (logging.DEBUG, "Message when function ends successfully")
+
+logging_format = "%(asctime)s: %(message)s"
+logging.basicConfig(format=logging_format, level=logging.INFO, datefmt="%H:%M:%S")
+logging.getLogger().setLevel(logging.DEBUG)
 
 try:
     from robot_hat import *
