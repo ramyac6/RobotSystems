@@ -2,6 +2,7 @@ import time
 import os
 import logging
 from logdecorator import log_on_start, log_on_end, log_on_error
+import atexit
 
 # Insert before function you want logdecorator for
 #  @log_on_start (logging.DEBUG, "Message when function starts")
@@ -183,15 +184,14 @@ class Picarx(object):
             # if abs_current_angle >= 0:
             if abs_current_angle > 40:
                 abs_current_angle = 40
-            power_scale = (100 - abs_current_angle) / 100.0
             # print("power_scale:",power_scale)
             if (current_angle / abs_current_angle) > 0:
-                self.set_motor_speed(1, 1*speed * power_scale)
-                self.set_motor_speed(2, -speed) 
+                self.set_motor_speed(1, speed)
+                self.set_motor_speed(2, -1*speed) 
                 # print("current_speed: %s %s"%(1*speed * power_scale, -speed))
             else:
                 self.set_motor_speed(1, speed)
-                self.set_motor_speed(2, -1*speed * power_scale)
+                self.set_motor_speed(2, -1*speed)
                 # print("current_speed: %s %s"%(speed, -1*speed * power_scale))
         else:
             self.set_motor_speed(1, speed)
@@ -213,9 +213,11 @@ class Picarx(object):
     def get_line_status(self,gm_val_list):
         return str(self.grayscale.get_line_status(gm_val_list))
 
+    atexit.register(set_power(0))
 
 if __name__ == "__main__":
     px = Picarx()
     px.forward(50)
     time.sleep(1)
     px.stop()
+
