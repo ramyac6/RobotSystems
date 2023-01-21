@@ -158,7 +158,17 @@ class Picarx(object):
 
     def set_power(self,speed):
         self.set_motor_speed(1, speed)
-        self.set_motor_speed(2, speed) 
+        self.set_motor_speed(2, speed)
+
+    def steering_scale_adjust(self, steering_angle):
+        wheel_dist = 11.8
+        axle_dist = 9.5
+
+        # in real ackermann we would have separate drive speeds based on the separate angles
+        # here there is only one angle so we can fudge and manipulate in the actual backwards and forwards
+        drive_speed = (axle_dist / np.tan(steering_angle)) + wheel_dist/2
+        scale = (drive_speed - wheel_dist / 2) / drive_speed
+        return abs(scale)
 
     def backward(self,speed):
         current_angle = self.dir_current_angle
@@ -167,14 +177,14 @@ class Picarx(object):
             # if abs_current_angle >= 0:
             if abs_current_angle > 40:
                 abs_current_angle = 40
-            power_scale = (100 - abs_current_angle) / 100.0 
-            # print("power_scale:",power_scale)
+            steering_scale = self.steering_scale_adjust(current_angle) 
+            # we're facing right so slow right
             if (current_angle / abs_current_angle) > 0:
+                self.set_motor_speed(1, -1*speed*steering_scale)
+                self.set_motor_speed(2, speed)
+            else: # we're facing left so slow left
                 self.set_motor_speed(1, -1*speed)
-                self.set_motor_speed(2, speed * power_scale)
-            else:
-                self.set_motor_speed(1, -1*speed * power_scale)
-                self.set_motor_speed(2, speed )
+                self.set_motor_speed(2, speed*steering_scale)
         else:
             self.set_motor_speed(1, -1*speed)
             self.set_motor_speed(2, speed)  
@@ -186,14 +196,14 @@ class Picarx(object):
             # if abs_current_angle >= 0:
             if abs_current_angle > 40:
                 abs_current_angle = 40
-            # print("power_scale:",power_scale)
+            steering_scale = self.steering_scale_adjust(current_angle) 
             if (current_angle / abs_current_angle) > 0:
-                self.set_motor_speed(1, speed)
+                self.set_motor_speed(1, speed*steering_scale)
                 self.set_motor_speed(2, -1*speed) 
                 # print("current_speed: %s %s"%(1*speed * power_scale, -speed))
             else:
                 self.set_motor_speed(1, speed)
-                self.set_motor_speed(2, -1*speed)
+                self.set_motor_speed(2, -1*speed)*steering_scale
                 # print("current_speed: %s %s"%(speed, -1*speed * power_scale))
         else:
             self.set_motor_speed(1, speed)
