@@ -1,5 +1,6 @@
 from picarx_improved import Picarx
 import atexit
+import time
 
 class Maneuvering(object):
     def __init__(self):
@@ -8,7 +9,7 @@ class Maneuvering(object):
 
     def calibrate_steering(self):
         self.px.forward(50)
-        self.time.sleep(1)
+        time.sleep(1)
         self.px.stop()
 
     def cleanup(self):
@@ -16,4 +17,4 @@ class Maneuvering(object):
 
 if __name__ == "__main__":
     maneuvering = Maneuvering()
-    maneuvering.calibrate_steering
+    maneuvering.calibrate_steering()
