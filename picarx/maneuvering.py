@@ -13,3 +13,7 @@ class Maneuvering(object):
 
     def cleanup(self):
         self.px.stop
+
+if __name__ == "__main__":
+    maneuvering = Maneuvering()
+    maneuvering.calibrate_steering
