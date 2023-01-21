@@ -3,15 +3,13 @@ import os
 import logging
 from logdecorator import log_on_start, log_on_end, log_on_error
 import atexit
+import numpy as np
 
 # Insert before function you want logdecorator for
 #  @log_on_start (logging.DEBUG, "Message when function starts")
 #  @log_on_error (logging.DEBUG, "Message when function encounters an error before completing")
 #  @log_on_end (logging.DEBUG, "Message when function ends successfully")
 
-logging_format = "%(asctime)s: %(message)s"
-logging.basicConfig(format=logging_format, level=logging.INFO, datefmt="%H:%M:%S")
-logging.getLogger().setLevel(logging.DEBUG)
 
 try:
     from robot_hat import *
@@ -23,6 +21,10 @@ except ImportError:
     from sim_robot_hat import *
 
 time.sleep(0.2)
+
+logging_format = "%(asctime)s: %(message)s"
+logging.basicConfig(format=logging_format, level=logging.INFO, datefmt="%H:%M:%S")
+logging.getLogger().setLevel(logging.DEBUG)
 
 # user and User home directory
 User = os.popen('echo ${SUDO_USER:-$LOGNAME}').readline().strip()
@@ -42,6 +44,7 @@ class Picarx(object):
     # grayscale_pins: 3 adc channels
     # ultrasonic_pins: tring, echo
     # config: path of config file
+    @log_on_start(logging.DEBUG, "Initializing PiCar")
     def __init__(self, 
                 servo_pins:list=['P0', 'P1', 'P2'], 
                 motor_pins:list=['D4', 'D5', 'P12', 'P13'],
@@ -96,8 +99,6 @@ class Picarx(object):
         elif speed < 0:
             direction = -1 * self.cali_dir_value[motor]
         speed = abs(speed)
-        if speed != 0:
-            speed = int(speed /2 ) + 50
         speed = speed - self.cali_speed_value[motor]
         if direction < 0:
             self.motor_direction_pins[motor].high()
@@ -170,6 +171,7 @@ class Picarx(object):
         scale = (drive_speed - wheel_dist / 2) / drive_speed
         return abs(scale)
 
+    @log_on_start(logging.DEBUG, "Driving backward")
     def backward(self,speed):
         current_angle = self.dir_current_angle
         if current_angle != 0:
@@ -189,6 +191,7 @@ class Picarx(object):
             self.set_motor_speed(1, -1*speed)
             self.set_motor_speed(2, speed)  
 
+    @log_on_start(logging.DEBUG, "Driving forward")
     def forward(self,speed):
         current_angle = self.dir_current_angle
         if current_angle != 0:
@@ -209,6 +212,7 @@ class Picarx(object):
             self.set_motor_speed(1, speed)
             self.set_motor_speed(2, -1*speed)                  
 
+    @log_on_start(logging.DEBUG, "Killing motors")
     def stop(self):
         self.set_motor_speed(1, 0)
         self.set_motor_speed(2, 0)
