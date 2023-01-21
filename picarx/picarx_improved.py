@@ -84,8 +84,10 @@ class Picarx(object):
         # usage: distance = self.ultrasonic.read()
         tring, echo= ultrasonic_pins
         self.ultrasonic = Ultrasonic(Pin(tring), Pin(echo))
-        
+        # kill motors on shutdown
+        atexit.register(self.stop)
 
+        
     def set_motor_speed(self,motor,speed):
         # global cali_speed_value,cali_dir_value
         motor -= 1
@@ -213,7 +215,6 @@ class Picarx(object):
     def get_line_status(self,gm_val_list):
         return str(self.grayscale.get_line_status(gm_val_list))
 
-    atexit.register(set_power(0))
 
 if __name__ == "__main__":
     px = Picarx()
