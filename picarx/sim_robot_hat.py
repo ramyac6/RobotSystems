@@ -31,23 +31,23 @@ class _Basic_class(object):
         return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
 
 class fileDB(object):
-	"""A file based database.
+    """A file based database.
     A file based database, read and write arguements in the specific file.
     """
-	def __init__(self, db:str, mode:str=None, owner:str=None):  
-		'''Init the db_file is a file to save the datas.'''
-		pass
+    def __init__(self, db:str, mode:str=None, owner:str=None):  
+        '''Init the db_file is a file to save the datas.'''
+        pass
 
 
-	def file_check_create(self, file_path:str, mode:str=None, owner:str=None):
-		pass
-	
-	def get(self, name, default_value=None):
-		"""Get value by data's name. Default value is for the arguemants do not exist"""
-		return default_value
-	
-	def set(self, name, value):
-		"""Set value by data's name. Or create one if the arguement does not exist"""
+    def file_check_create(self, file_path:str, mode:str=None, owner:str=None):
+        pass
+    
+    def get(self, name, default_value=None):
+        """Get value by data's name. Default value is for the arguemants do not exist"""
+        return default_value
+    
+    def set(self, name, value):
+        """Set value by data's name. Or create one if the arguement does not exist"""
         pass
 
 
