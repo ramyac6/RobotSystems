@@ -127,7 +127,26 @@ class Maneuvering(object):
 
 if __name__ == "__main__":
     maneuvering = Maneuvering()
-    # maneuvering.calibrate_steering()
-    # maneuvering.forward_and_backward_with_steering(20,-20)
-    # maneuvering.parallel_parking()
-    maneuvering.k_turn()
+
+    while True:
+        print("Welcome to the Picar menu!")
+        print("0: Calibrate Steering")
+        print("1: Forward and Backward (with steering")
+        print("2: Parallel Parking")
+        print("3: K-turn")
+        print("q: Quit")
+
+        menu_option = input("Please select a maneuver or q to quit: ")
+        if menu_option == "0":
+            maneuvering.calibrate_steering()
+        elif menu_option == "1":
+            maneuvering.forward_and_backward_with_steering(0,0)
+        elif menu_option == "2":
+            maneuvering.parallel_parking()
+        elif menu_option == "3":
+            maneuvering.k_turn()
+        elif menu_option == "q":
+            exit()
+        else:
+            print("Invalid Selction")
+    
