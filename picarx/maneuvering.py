@@ -19,6 +19,7 @@ class Maneuvering(object):
         self.px.stop()
     
     def forward_and_backward_with_steering(self):
+        # take input
         valid = False
         forward_steer = input("Input forward steering angle: ")
         while not valid:
@@ -37,7 +38,6 @@ class Maneuvering(object):
             except ValueError:
                 backward_steer = input("Invalid number. Input backward steering angle: ")
 
-            
         # forward
         self.px.set_dir_servo_angle(forward_steer)
         time.sleep(self.command_wait)
@@ -58,6 +58,7 @@ class Maneuvering(object):
         self.px.set_dir_servo_angle(0)
 
     def parallel_parking(self):
+        # take input
         valid = False
         side = input("Input parking side (left or right): ")
         while not valid:
@@ -125,6 +126,7 @@ class Maneuvering(object):
         time.sleep(self.command_wait)
 
     def k_turn(self):
+        # take input
         valid = False
         side = input("Input initial turning side (left or right): ")
         while not valid:
@@ -169,31 +171,35 @@ class Maneuvering(object):
         self.px.set_dir_servo_angle(0)
         time.sleep(self.command_wait)
 
+    def menu(self):
+        while True:
+            print("Welcome to the Picar menu!")
+            print("0: Calibrate Steering")
+            print("1: Forward and Backward (with steering")
+            print("2: Parallel Parking")
+            print("3: K-turn")
+            print("q: Quit")
+
+            menu_option = input("Please select a maneuver or q to quit: ")
+            if menu_option == "0":
+                maneuvering.calibrate_steering()
+            elif menu_option == "1":
+                maneuvering.forward_and_backward_with_steering()
+            elif menu_option == "2":
+                maneuvering.parallel_parking()
+            elif menu_option == "3":
+                maneuvering.k_turn()
+            elif menu_option == "q":
+                return
+            else:
+                print("Invalid Selection")
+
     def cleanup(self):
         self.px.set_dir_servo_angle(0)
         self.px.stop
 
 if __name__ == "__main__":
     maneuvering = Maneuvering()
-    while True:
-        print("Welcome to the Picar menu!")
-        print("0: Calibrate Steering")
-        print("1: Forward and Backward (with steering")
-        print("2: Parallel Parking")
-        print("3: K-turn")
-        print("q: Quit")
+    maneuvering.menu()
 
-        menu_option = input("Please select a maneuver or q to quit: ")
-        if menu_option == "0":
-            maneuvering.calibrate_steering()
-        elif menu_option == "1":
-            maneuvering.forward_and_backward_with_steering()
-        elif menu_option == "2":
-            maneuvering.parallel_parking()
-        elif menu_option == "3":
-            maneuvering.k_turn()
-        elif menu_option == "q":
-            exit()
-        else:
-            print("Invalid Selction")
     
