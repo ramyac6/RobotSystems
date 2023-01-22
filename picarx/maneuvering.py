@@ -90,7 +90,36 @@ class Maneuvering(object):
         self.px.set_dir_servo_angle(0)
         time.sleep(self.command_wait)
 
-        
+    def k_turn(self):
+        # initial turn
+        self.px.set_dir_servo_angle(-self.max_steering/2)
+        time.sleep(self.command_wait)
+        self.px.forward(self.default_speed)
+        time.sleep(self.pause*2.5)
+        self.px.stop()
+        time.sleep(self.command_wait)
+        self.px.set_dir_servo_angle(0)
+        time.sleep(self.command_wait)
+
+        # backup
+        self.px.set_dir_servo_angle(self.max_steering/1.5)
+        time.sleep(self.command_wait)
+        self.px.backward(self.default_speed)
+        time.sleep(self.pause*1.7)
+        self.px.stop()
+        time.sleep(self.command_wait)
+        self.px.set_dir_servo_angle(0)
+        time.sleep(self.command_wait)
+
+        # straighten
+        self.px.set_dir_servo_angle(0)
+        time.sleep(self.command_wait)
+        self.px.forward(self.default_speed)
+        time.sleep(self.pause*1.5)
+        self.px.stop()
+        time.sleep(self.command_wait)
+        self.px.set_dir_servo_angle(0)
+        time.sleep(self.command_wait)
 
     def cleanup(self):
         self.px.set_dir_servo_angle(0)
@@ -100,4 +129,5 @@ if __name__ == "__main__":
     maneuvering = Maneuvering()
     # maneuvering.calibrate_steering()
     # maneuvering.forward_and_backward_with_steering(20,-20)
-    maneuvering.parallel_parking()
+    # maneuvering.parallel_parking()
+    maneuvering.k_turn()
