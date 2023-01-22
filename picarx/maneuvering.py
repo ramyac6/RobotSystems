@@ -18,7 +18,26 @@ class Maneuvering(object):
         time.sleep(self.pause)
         self.px.stop()
     
-    def forward_and_backward_with_steering(self, forward_steer, backward_steer):
+    def forward_and_backward_with_steering(self):
+        valid = False
+        forward_steer = input("Input forward steering angle: ")
+        while not valid:
+            try:
+                forward_steer = int(forward_steer)
+                valid = True
+            except ValueError:
+                forward_steer = input("Invalid number. Input forward steering angle: ")
+            
+        valid = False
+        backward_steer = input("Input backward steering angle: ")
+        while not valid:
+            try: 
+                backward_steer = int(backward_steer)
+                valid = True
+            except ValueError:
+                backward_steer = input("Invalid number. Input backward steering angle: ")
+
+            
         # forward
         self.px.set_dir_servo_angle(forward_steer)
         time.sleep(self.command_wait)
@@ -39,6 +58,15 @@ class Maneuvering(object):
         self.px.set_dir_servo_angle(0)
 
     def parallel_parking(self):
+        valid = False
+        side = input("Input parking side (left or right): ")
+        while not valid:
+            if side == "left" or side == "right":
+                valid = True
+            else:
+                side = input("Invalid input. Input parking side (left or right): ")
+
+
         # assume side by side start 1in away
         # backwards
         self.px.set_dir_servo_angle(0)
@@ -51,7 +79,10 @@ class Maneuvering(object):
         time.sleep(self.command_wait)
         
         # back 45 into spot
-        self.px.set_dir_servo_angle(self.max_steering)
+        if side == "left":
+            self.px.set_dir_servo_angle(-self.max_steering)
+        else:
+            self.px.set_dir_servo_angle(self.max_steering)
         time.sleep(self.command_wait)
         self.px.backward(self.default_speed)
         time.sleep(self.pause)
@@ -71,7 +102,10 @@ class Maneuvering(object):
         time.sleep(self.command_wait)
 
         # back 45 to parallel
-        self.px.set_dir_servo_angle(-self.max_steering)
+        if side == "left":
+            self.px.set_dir_servo_angle(self.max_steering)
+        else:
+            self.px.set_dir_servo_angle(-self.max_steering)
         time.sleep(self.command_wait)
         self.px.backward(self.default_speed)
         time.sleep(self.pause)
@@ -91,8 +125,19 @@ class Maneuvering(object):
         time.sleep(self.command_wait)
 
     def k_turn(self):
+        valid = False
+        side = input("Input initial turning side (left or right): ")
+        while not valid:
+            if side == "left" or side == "right":
+                valid = True
+            else:
+                side = input("Invalid input. Input initial turning side (left or right): ")
+
         # initial turn
-        self.px.set_dir_servo_angle(-self.max_steering/2)
+        if side == "left":
+            self.px.set_dir_servo_angle(-self.max_steering/2)
+        else:
+            self.px.set_dir_servo_angle(self.max_steering/2)
         time.sleep(self.command_wait)
         self.px.forward(self.default_speed)
         time.sleep(self.pause*2.5)
@@ -102,7 +147,10 @@ class Maneuvering(object):
         time.sleep(self.command_wait)
 
         # backup
-        self.px.set_dir_servo_angle(self.max_steering/1.5)
+        if side == "left":
+            self.px.set_dir_servo_angle(self.max_steering/1.5)
+        else:
+            self.px.set_dir_servo_angle(-self.max_steering/1.5)
         time.sleep(self.command_wait)
         self.px.backward(self.default_speed)
         time.sleep(self.pause*1.7)
@@ -127,7 +175,6 @@ class Maneuvering(object):
 
 if __name__ == "__main__":
     maneuvering = Maneuvering()
-
     while True:
         print("Welcome to the Picar menu!")
         print("0: Calibrate Steering")
@@ -140,7 +187,7 @@ if __name__ == "__main__":
         if menu_option == "0":
             maneuvering.calibrate_steering()
         elif menu_option == "1":
-            maneuvering.forward_and_backward_with_steering(0,0)
+            maneuvering.forward_and_backward_with_steering()
         elif menu_option == "2":
             maneuvering.parallel_parking()
         elif menu_option == "3":
