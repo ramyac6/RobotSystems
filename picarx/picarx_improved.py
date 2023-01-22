@@ -137,6 +137,7 @@ class Picarx(object):
         self.config_flie.set("picarx_dir_servo", "%s"%value)
         self.dir_servo_pin.angle(value)
 
+    @log_on_end(logging.DEBUG, "Steering angle set to {value}")
     def set_dir_servo_angle(self,value):
         self.dir_current_angle = value
         angle_value  = value + self.dir_cal_value
@@ -169,7 +170,7 @@ class Picarx(object):
 
         # in real ackermann we would have separate drive speeds based on the separate angles
         # here there is only one angle so we can fudge and manipulate in the actual backwards and forwards
-        drive_speed = (axle_dist / np.tan(steering_angle)) + wheel_dist/2
+        drive_speed = np.tan(90 - abs(steering_angle)) * axle_dist + wheel_dist / 2
         scale = (drive_speed - wheel_dist / 2) / drive_speed
         return abs(scale)
 
@@ -186,9 +187,11 @@ class Picarx(object):
             if (current_angle / abs_current_angle) > 0:
                 self.set_motor_speed(1, -1*speed*steering_scale)
                 self.set_motor_speed(2, speed)
+                # print("current_speed: %s %s"%(-1*speed*steering_scale, speed))
             else: # we're facing left so slow left
                 self.set_motor_speed(1, -1*speed)
                 self.set_motor_speed(2, speed*steering_scale)
+                # print("current_speed: %s %s"%(-speed, speed*steering_scale))
         else:
             self.set_motor_speed(1, -1*speed)
             self.set_motor_speed(2, speed)  
@@ -203,13 +206,13 @@ class Picarx(object):
                 abs_current_angle = 40
             steering_scale = self.steering_scale_adjust(current_angle) 
             if (current_angle / abs_current_angle) > 0:
-                self.set_motor_speed(1, speed*steering_scale)
+                self.set_motor_speed(1, 1*speed*steering_scale)
                 self.set_motor_speed(2, -1*speed) 
-                # print("current_speed: %s %s"%(1*speed * power_scale, -speed))
+                # print("current_speed: %s %s"%(1*speed*steering_scale, -speed))
             else:
                 self.set_motor_speed(1, speed)
-                self.set_motor_speed(2, -1*speed)*steering_scale
-                # print("current_speed: %s %s"%(speed, -1*speed * power_scale))
+                self.set_motor_speed(2, -1*speed*steering_scale)
+                # print("current_speed: %s %s"%(speed, -1*speed*steering_scale))
         else:
             self.set_motor_speed(1, speed)
             self.set_motor_speed(2, -1*speed)                  
