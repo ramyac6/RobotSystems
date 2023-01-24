@@ -1,11 +1,17 @@
-from picarx_improved import Picarx
-
+try:
+    from robot_hat import *
+    from robot_hat import reset_mcu
+    reset_mcu()
+    time.sleep(0.01)
+except ImportError:
+    print("This computer does not appear to be a PiCar-X system (robot_hat is not present). Shadowing hardware calls with substitute functions ")
+    from sim_robot_hat import *
 
 class Sensors(object):
     def __init__(self,pin0,pin1,pin2):
-        self.chn0 = Picarx.ADC(pin0)
-        self.chn1 = Picarx.ADC(pin1)
-        self.chn2 = Picarx.ADC(pin2)
+        self.chn0 = ADC(pin0)
+        self.chn1 = ADC(pin1)
+        self.chn2 = ADC(pin2)
 
     def read(self):
         adc_value_list = []
@@ -15,7 +21,7 @@ class Sensors(object):
         return adc_value_list
 
 if __name__ == "__main__":
-    sensor = Sensors(0,1,2)
+    sensor = Sensors("A0","A1","A2")
     print(sensor.read())
 
     
