@@ -1,4 +1,3 @@
-from picarx_improved import Picarx
 import time
 try:
     from robot_hat import *
@@ -23,15 +22,9 @@ class Sensors(object):
         return adc_value_list
 
 if __name__ == "__main__":
-    car = Picarx()
     sensor = Sensors("A0","A1","A2")
-    print(sensor.read())
-    car.set_dir_servo_angle(forward_steer)
-    time.sleep(0.1)
-    car.forward(20)
-    time.sleep(0.1)
-    car.backward(20)
-    time.sleep(0.1)
-    car.stop()
-
-    
+    x = 0
+    while (x < 1000000):
+        time.sleep(0.5)
+        print(sensor.read())
+        x = x + 0.1
