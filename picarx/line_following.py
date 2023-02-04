@@ -1,3 +1,4 @@
+import time
 from sensors import Sensors
 from controller import Controller
 from interpreter import Interpreter

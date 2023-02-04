@@ -11,9 +11,9 @@ class Interpreter(object):
         if right - left > 0: # means we're left of the line
             turn = -1 * (middle - right) / (middle + right)
         else:
-            turn = -1 * (middle - right) / (middle + right)
+            turn = (middle - left) / (middle + left)
 
-        return turn * sensitivity
+        return turn * self.sensitivity
 
     def processing(self, values):
         # thresholds for marking
