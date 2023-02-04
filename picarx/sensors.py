@@ -1,19 +1,16 @@
 import time
 try:
-    from robot_hat import *
-    from robot_hat import reset_mcu
-    reset_mcu()
-    time.sleep(0.01)
+    from robot_hat import ADC
 except ImportError:
     print("This computer does not appear to be a PiCar-X system (robot_hat is not present). Shadowing hardware calls with substitute functions ")
     from sim_robot_hat import *
 
 class Sensors(object):
-    def __init__(self,pin0,pin1,pin2):
+    def __init__(self):
         # grayscale sensors
-        self.chn0 = Picarx.ADC('A0')
-        self.chn1 = Picarx.ADC('A1')
-        self.chn2 = Picarx.ADC('A2')
+        self.chn0 = ADC('A0')
+        self.chn1 = ADC('A1')
+        self.chn2 = ADC('A2')
         self.chn1_cal = 0
         self.chn2_cal = 0
         self.chn3_cal = 0
