@@ -1,16 +1,10 @@
 from sensors import Sensors
 from controller import Controller
 from interpreter import Interpreter
-try:
-    from robot_hat import *
-    from robot_hat import reset_mcu
-    reset_mcu()
-    time.sleep(0.01)
-except ImportError:
-    print("This computer does not appear to be a PiCar-X system (robot_hat is not present). Shadowing hardware calls with substitute functions ")
-    from sim_robot_hat import *
+from picarx_improved import Picarx
 
-def follow_line(self, scale = 50):
+
+def follow_line(scale = 50):
     sensor = Sensors()
     input("Press enter to calibrate grayscale, make sure all sensors are on black")
 
@@ -24,5 +18,8 @@ def follow_line(self, scale = 50):
     input("Press enter to start")
 
     while(True):
-        controller.control(interpreter.calculate_direction(sensor.read()))
+        controller.control(interpreter.processing(sensor.read()))
         time.sleep(0.1)
+
+if __name__ == "__main__":
+    follow_line()
