@@ -10,9 +10,10 @@ except ImportError:
 
 class Sensors(object):
     def __init__(self,pin0,pin1,pin2):
-        self.chn0 = ADC(pin0)
-        self.chn1 = ADC(pin1)
-        self.chn2 = ADC(pin2)
+        # grayscale sensors
+        self.chn0 = Picarx.ADC('A0')
+        self.chn1 = Picarx.ADC('A1')
+        self.chn2 = Picarx.ADC('A2')
 
     def read(self):
         adc_value_list = []

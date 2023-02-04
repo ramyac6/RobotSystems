@@ -215,7 +215,13 @@ class Picarx(object):
                 # print("current_speed: %s %s"%(speed, -1*speed*steering_scale))
         else:
             self.set_motor_speed(1, speed)
-            self.set_motor_speed(2, -1*speed)                  
+            self.set_motor_speed(2, -1*speed) 
+
+    def drive(self,speed):
+        if speed > 0:
+            self.forward(speed)
+        else:
+            self.backward(speed)                 
 
     @log_on_start(logging.DEBUG, "Killing motors")
     def stop(self):
