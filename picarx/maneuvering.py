@@ -5,7 +5,6 @@ import time
 class Maneuvering(object):
     def __init__(self):
         self.px = Picarx()
-        #self.px = px
         self.default_speed = 40
         self.default_steering = 20
         self.max_steering = 40
