@@ -187,6 +187,17 @@ class Pin(_Basic_class):
         def __init__(self):
             pass
 
+class ADC(I2C):
+    ADDR=0x14                   # 扩展板的地址为0x14
+
+    def __init__(self, chn):    # 参数，通道数，树莓派扩展板上有8个adc通道分别为"A0, A1, A2, A3, A4, A5, A6, A7"
+        pass
+        
+    def read(self):                     # adc通道读取数---写一次数据，读取两次数据 （读取的数据范围是0~4095）
+        pass
+
+    def read_voltage(self):                             # 将读取的数据转化为电压值（0~3.3V）
+        pass
 
 class Grayscale_Module(object):
     def __init__(self, pin0, pin1, pin2, reference=1000):
