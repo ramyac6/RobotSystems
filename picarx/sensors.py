@@ -14,6 +14,9 @@ class Sensors(object):
         self.chn0 = Picarx.ADC('A0')
         self.chn1 = Picarx.ADC('A1')
         self.chn2 = Picarx.ADC('A2')
+        self.chn1_cal = 0
+        self.chn2_cal = 0
+        self.chn3_cal = 0
 
     def read(self):
         adc_value_list = []
@@ -21,6 +24,9 @@ class Sensors(object):
         adc_value_list.append(self.chn1.read())
         adc_value_list.append(self.chn2.read())
         return adc_value_list
+    
+    def calibrate_grayscale(self):
+        self.chn1_cal, self.chn2_cal, self.chn3_cal = self.read()
 
 if __name__ == "__main__":
     sensor = Sensors("A0","A1","A2")
