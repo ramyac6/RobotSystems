@@ -19,7 +19,9 @@ def follow_line(scale = 50):
     input("Press enter to start")
 
     while(True):
-        controller.control(interpreter.processing(sensor.read()))
+        values = sensor.read()
+        print(values)
+        controller.control(interpreter.processing(values))
         time.sleep(0.1)
 
 if __name__ == "__main__":
