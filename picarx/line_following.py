@@ -19,11 +19,11 @@ def follow_line():
     input("Press enter to start")
 
     while(True):
-        car.forward(20)
         values = sensor.read()
         print(values)
         print([a/b for a,b in zip(values,sensor.grayscale_cal_values)])
         controller.control(interpreter.processing(values,sensor.grayscale_cal_values))
+        car.forward(20)
         time.sleep(0.1)
 
 if __name__ == "__main__":
