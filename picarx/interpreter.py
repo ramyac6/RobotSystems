@@ -1,38 +1,28 @@
 from picarx_improved import Picarx
-
+import numpy as np
 
 class Interpreter(object):
-    def __init__(self,sensitivity=0.5,polarity=1):
+    def __init__(self,sensitivity=0.1,polarity=1):
         self.sensitivity = sensitivity * polarity
 
-    def processing1(self, values):
+    def processing(self, values, cal_values):
+        values = [x+1 if x == 0 else x for x in values]
         left, middle, right = values
 
-        if right - left > 0: # means we're left of the line
-            turn = -1 * (middle - right) / (middle + right)
-        else:
-            turn = (middle - left) / (middle + left)
+        left, middle, right = values
+        left_cal, middle_cal, right_cal = cal_values
+        left = left/left_cal
+        middle = middle/middle_cal
+        right = right/right_cal
 
-        return turn * self.sensitivity
+        if abs(right - left) > self.sensitivity: # means we're off the line
+            if right > left:
+                print("left")
+                turn = (left - middle) / (middle+left)
+            else: # left > right:
+                turn = (middle - right) / (middle+right)
+        else: # we're perfect
+            turn = 0
 
-    def processing(self, values):
-        # thresholds for marking
-        similarity =
-        difference = 
+        return turn
 
-        # if left and middle are same and left and right are different
-            # hard right
-        # if righ tand middle are same and left and right are different 
-            # slight right
-        # if left and middle are same and left and right are different
-            # light left
-        # if right and middle are same and left and right are different 
-            # hard left
-        # if right and left are same and right is light
-            # we're good
-        # if right and left are same and right is light
-            # uhhhhhh
-
-
-if __name__ == "__main__":
-    print()
