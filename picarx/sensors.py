@@ -1,4 +1,5 @@
 import time
+import statistics
 try:
     from robot_hat import ADC
 except ImportError:
@@ -11,9 +12,7 @@ class Sensors(object):
         self.chn0 = ADC('A0')
         self.chn1 = ADC('A1')
         self.chn2 = ADC('A2')
-        self.chn1_cal = 0
-        self.chn2_cal = 0
-        self.chn3_cal = 0
+        self.grayscale_cal_values = []
 
     def read(self):
         adc_value_list = []
@@ -21,12 +20,25 @@ class Sensors(object):
         adc_value_list.append(self.chn1.read())
         adc_value_list.append(self.chn2.read())
         return adc_value_list
-    
+
     def calibrate_grayscale(self):
-        self.chn1_cal, self.chn2_cal, self.chn3_cal = self.read()
+        x = 0
+        ch0 = []
+        ch1 = []
+        ch2 = []
+        while (x < 10):
+            time.sleep(0.1)
+            values = self.read()
+            ch0.append(values[0])
+            ch1.append(values[1])
+            ch2.append(values[2])
+            x = x + 1
+        self.grayscale_cal_values.append(statistics.mean(ch0))
+        self.grayscale_cal_values.append(statistics.mean(ch1))
+        self.grayscale_cal_values.append(statistics.mean(ch2))
 
 if __name__ == "__main__":
-    sensor = Sensors("A0","A1","A2")
+    sensor = Sensors()
     x = 0
     while (x < 1000000):
         time.sleep(0.5)
