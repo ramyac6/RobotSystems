@@ -90,7 +90,7 @@ class Picarx(object):
         tring, echo= ultrasonic_pins
         self.ultrasonic = Ultrasonic(Pin(tring), Pin(echo))
         # kill motors on shutdown
-        atexit.register(self.stop())
+        atexit.register(self.stop)
 
         
     def set_motor_speed(self,motor,speed):
