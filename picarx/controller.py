@@ -1,15 +1,12 @@
 from picarx_improved import Picarx
-
+import atexit
 
 class Controller(object):
-    def __init__(self,car,scale):
+    def __init__(self,car,scale=30):
         self.scale = scale
         self.car = car
-        atexit.register(self.car.stop())
 
+    def control(self, offset):
+        steering_angle = offset * self.scale
+        self.car.set_dir_servo_angle(steering_angle)
 
-    def control(self,angle, speed=20):
-        self.car.drive(speed, angle*self.scale)
-
-if __name__ == "__main__":
-    print()
