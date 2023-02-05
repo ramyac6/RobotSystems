@@ -5,6 +5,8 @@ class Controller(object):
     def __init__(self,car,scale):
         self.scale = scale
         self.car = car
+        atexit.register(self.car.stop())
+
 
     def control(self,angle, speed=20):
         self.car.drive(speed, angle*self.scale)
