@@ -28,6 +28,7 @@ def follow_line():
     eInterpreter.result()
     eController.result()
 
+    '''
     while(True):
         values = sensor.read()
         print(values)
@@ -35,6 +36,6 @@ def follow_line():
         controller.control(interpreter.processing(values,sensor.grayscale_cal_values))
         car.forward(20)
         time.sleep(0.1)
-
+    '''
 if __name__ == "__main__":
     follow_line()

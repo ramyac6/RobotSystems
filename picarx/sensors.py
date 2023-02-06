@@ -42,7 +42,7 @@ class Sensors(object):
         self.grayscale_cal_values.append(statistics.mean(ch1))
         self.grayscale_cal_values.append(statistics.mean(ch2))
 
-    def produce(self, delay):
+    def produce(self, bus, delay):
         self.running = True
         while self.running:
             self.bus.write(self.read())
