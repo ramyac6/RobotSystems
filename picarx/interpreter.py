@@ -1,9 +1,9 @@
-from picarx_improved import Picarx
-import numpy as np
+import time
 
 class Interpreter(object):
     def __init__(self,sensitivity=0.1,polarity=1):
         self.sensitivity = sensitivity * polarity
+        self.running = False
 
     def processing(self, values, cal_values):
         values = [x+1 if x == 0 else x for x in values]
@@ -25,4 +25,10 @@ class Interpreter(object):
             turn = 0
 
         return turn
+
+    def produce_consume(self, sensor_bus, control_bus, delay):
+        self.running = True
+        while self.running:
+            control_bus.write(self.processing(sensor_bus.read()))
+            time.sleep(delay)
 
