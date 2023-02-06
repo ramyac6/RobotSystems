@@ -3,6 +3,7 @@ from sensors import Sensors
 from controller import Controller
 from interpreter import Interpreter
 from picarx_improved import Picarx
+import concurrent.futures
 
 
 def follow_line():
@@ -17,6 +18,15 @@ def follow_line():
     controller = Controller(car)
 
     input("Press enter to start")
+
+    with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
+        eSensor = executor.submit(sensor.produce, sensor.bus, sensor.delay)
+        eInterpreter = executor.submit(interpreter.produce_consume, sensor.bus, interpreter.bus, interpreter.delay)
+        eController = executor.submit(controller.consume, interpreter.bus, controller.delay)
+
+    eSensor.result()
+    eInterpreter.result()
+    eController.result()
 
     while(True):
         values = sensor.read()
