@@ -1,31 +1,29 @@
 import time
-from sensors import Sensors
-from controller import Controller
-from interpreter import Interpreter
+from grayscale import Grayscale_Sensor, Grayscale_Controller, Grayscale_Interpreter
 from picarx_improved import Picarx
-from bus import Bus
+from rossros import Bus
 import concurrent.futures
 
 
 def follow_line():
-    sensor = Sensors()
+    gs_sensor = Grayscale_Sensor()
     input("Press enter to calibrate grayscale, make sure all sensors are on white")
 
-    sensor.calibrate_grayscale()
+    gs_sensor.calibrate_grayscale()
 
     # setup car things
-    interpreter = Interpreter()
+    interpreter = Grayscale_Interpreter()
     car = Picarx()
-    controller = Controller(car)
+    controller = Grayscale_Controller(car)
     # setup busses
-    interpreter_bus = Bus()
-    sensor_bus = Bus()
+    interpreter_bus = Bus(name="interpreter_bus")
+    sensor_bus = Bus(name="sensor_bus")
     delay = 0.05
 
     input("Press enter to start")
 
     with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
-        eSensor = executor.submit(sensor.produce, sensor_bus, delay)
+        eSensor = executor.submit(gs_sensor.produce, sensor_bus, delay)
         eInterpreter = executor.submit(interpreter.produce_consume, sensor_bus, interpreter_bus, delay)
         eController = executor.submit(controller.consume, interpreter_bus, delay)
 
