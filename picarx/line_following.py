@@ -15,7 +15,7 @@ def follow_line():
     gs_controller = Grayscale_Controller(car)
     us_sensor = Ultrasonic_Sensor()
     us_interpreter = Ultrasonic_Interpreter()
-    us_controller = Ultrasonic_Controller()
+    us_controller = Ultrasonic_Controller(car)
     # setup busses
     gs_interpreter_bus = Bus(initial_message=[0, 0, 0],name="gs_interpreter_bus")
     gs_sensor_bus = Bus(initial_message=0,name="gs_sensor_bus")
