@@ -41,7 +41,8 @@ class Sensors(object):
 
     def produce(self, sensor_bus: Bus, delay):
         while True:
-            sensor_bus.write(self.read())
+            message = self.read()
+            sensor_bus.write(message)
             time.sleep(delay)
 
 if __name__ == "__main__":

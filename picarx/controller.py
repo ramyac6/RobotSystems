@@ -11,10 +11,12 @@ class Controller(object):
     def control(self, offset):
         steering_angle = offset * self.scale
         self.car.set_dir_servo_angle(steering_angle)
+        self.car.forward(20)
 
     def consume(self, interpreter_bus: Bus, delay):
         self.running = True
         while self.running:
-            self.control(interpreter_bus.read())
+            message = interpreter_bus.read()
+            self.control(message)
             time.sleep(delay)
 

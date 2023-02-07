@@ -2,11 +2,9 @@ import time
 from bus import Bus
 
 class Interpreter(object):
-    def __init__(self,sensitivity=0.1,polarity=1,delay=0.05):
+    def __init__(self,sensitivity=0.1,polarity=1):
         self.sensitivity = sensitivity * polarity
         self.running = False
-        self.bus = Bus(name="InterpreterBus")
-        self.delay = delay
 
     def processing(self, values, cal_values):
         values = [x+1 if x == 0 else x for x in values]
@@ -32,6 +30,8 @@ class Interpreter(object):
     def produce_consume(self, sensor_bus: Bus, interpreter_bus: Bus, delay):
         self.running = True
         while self.running:
-            interpreter_bus.write(self.processing(sensor_bus.read()))
+            message = sensor_bus.read()
+            value = self.processing(message)
+            interpreter_bus.write(value)
             time.sleep(delay)
 
