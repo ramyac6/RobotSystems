@@ -5,7 +5,7 @@ class Interpreter(object):
     def __init__(self,sensitivity=0.1,polarity=1,delay=0.05):
         self.sensitivity = sensitivity * polarity
         self.running = False
-        self.bus = Bus()
+        self.bus = Bus(name="InterpreterBus")
         self.delay = delay
 
     def processing(self, values, cal_values):
@@ -29,9 +29,9 @@ class Interpreter(object):
 
         return turn
 
-    def produce_consume(self, sensor_bus, delay):
+    def produce_consume(self, sensor_bus: Bus, interpreter_bus: Bus, delay):
         self.running = True
         while self.running:
-            self.bus.write(self.processing(sensor_bus.read()))
+            interpreter_bus.write(self.processing(sensor_bus.read()))
             time.sleep(delay)
 

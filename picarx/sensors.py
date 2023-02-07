@@ -9,15 +9,12 @@ except ImportError:
     from sim_robot_hat import *
 
 class Sensors(object):
-    def __init__(self, delay=0.05):
+    def __init__(self):
         # grayscale sensors
         self.chn0 = ADC('A0')
         self.chn1 = ADC('A1')
         self.chn2 = ADC('A2')
         self.grayscale_cal_values = []
-        self.bus = Bus()
-        self.delay = delay
-        self.running = False
 
     def read(self):
         adc_value_list = []
@@ -42,10 +39,9 @@ class Sensors(object):
         self.grayscale_cal_values.append(statistics.mean(ch1))
         self.grayscale_cal_values.append(statistics.mean(ch2))
 
-    def produce(self, delay):
-        self.running = True
-        while self.running:
-            self.bus.write(self.read())
+    def produce(self, sensor_bus: Bus, delay):
+        while True:
+            sensor_bus.write(self.read())
             time.sleep(delay)
 
 if __name__ == "__main__":
